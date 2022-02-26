@@ -16,6 +16,8 @@ public class TopicoController {
         Curso curso = new Curso("Javascript", "Programação");
         Topico topico = new Topico("Novo tópico", "Essa é a mensagem do nosso tópico, mudou!", curso);
 
+        System.out.println("Oi mundo!");
+
         return TopicoDto.converter(Arrays.asList(topico, topico, topico));
     }
 
