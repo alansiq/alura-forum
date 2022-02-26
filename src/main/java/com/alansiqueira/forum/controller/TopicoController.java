@@ -3,6 +3,8 @@ package com.alansiqueira.forum.controller;
 import com.alansiqueira.forum.dto.TopicoDto;
 import com.alansiqueira.forum.model.Curso;
 import com.alansiqueira.forum.model.Topico;
+import com.alansiqueira.forum.repository.TopicoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
@@ -10,15 +12,27 @@ import java.util.List;
 
 @RestController
 public class TopicoController {
+    private final TopicoRepository topicoRepository;
+
+    public TopicoController(TopicoRepository topicoRepository) {
+        this.topicoRepository = topicoRepository;
+    }
 
     @RequestMapping("/topicos")
-    public List<TopicoDto> lista() {
-        Curso curso = new Curso("Javascript", "Programação");
-        Topico topico = new Topico("Novo tópico", "Essa é a mensagem do nosso tópico, mudou!", curso);
+    public List<TopicoDto> lista(String nomeCurso) {
+        try {
+            if (nomeCurso == null || nomeCurso.isBlank()) {
+                List<Topico> topicos = topicoRepository.findAll();
+                return TopicoDto.converter(topicos);
+            } else {
+                List<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso);
+                return TopicoDto.converter(topicos);
+            }
 
-        System.out.println("Oi mundo!");
+        } catch (Error e) {
+            throw e;
+        }
 
-        return TopicoDto.converter(Arrays.asList(topico, topico, topico));
     }
 
 
