@@ -2,7 +2,9 @@ package com.alansiqueira.forum.controller;
 
 import com.alansiqueira.forum.dto.CursoDto;
 import com.alansiqueira.forum.model.Curso;
+import com.alansiqueira.forum.repository.CursoRepository;
 import jdk.swing.interop.SwingInterOpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,12 +15,12 @@ import java.util.List;
 @RestController
 public class CursoController {
 
+    @Autowired
+    private CursoRepository cursoRepository;
+
     @RequestMapping("/cursos")
     public List<CursoDto> cursos() {
-
-        Curso curso = new Curso("Nome do curso", "categoria do curso");
-        System.out.println("Hit cursos endpoint");
-
-        return CursoDto.converter(Arrays.asList(curso, curso, curso));
+        List<Curso> cursos = cursoRepository.findAll();
+        return CursoDto.converter(cursos);
     }
 }
